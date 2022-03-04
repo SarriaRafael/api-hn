@@ -6,17 +6,17 @@ import styles from '../styles/Home.module.css'
 export default function Home() {
   let [rafdata, setRafdata] = useState([]);
   let [page, setPage] = useState(0);
-  let [rafselect, setRafselect] = useState("Selecione")
-  let fecha: Number =  9000 //121312000;  5160418900;
+  let [rafselect, setRafselect] = useState("")
+  let [fecha, setFecha] = useState(0) //fecha: Number =  9000 //121312000;  5160418900;
   let hoy = new Date();
   let strhoy = hoy.getFullYear() + "-0"+ hoy.getMonth() + "-"+ hoy.getDate();
 
   function llamada() {
+    
     fetch("http://localhost:3000/api/fecha/"+fecha+"&page="+page+"&tags="+rafselect)
       .then((dat) => dat.json())
       .then((raf) => {
-        console.log("otra forma ");
-        console.log(raf);
+        
         return setRafdata(raf.salida);
       });
   }
@@ -35,9 +35,42 @@ export default function Home() {
   }
 
   function select(e:any){
-    e.preventDefault()    
+    e.preventDefault()
     setRafselect(e.target.value)
+    setPage(0)
     llamada()
+  }
+
+  function minutos(e:any){
+    setPage(0)
+    setFecha(e.target.value*60)
+  }
+  function horas(e:any){
+    setPage(0)
+    setFecha(e.target.value*3600)
+  }
+  function dias(e:any){
+    setPage(0)
+    setFecha(e.target.value*86400)
+  }
+  function calendario(e:any){
+    setPage(0)
+     
+    let aux:String=e.target.value[0]+e.target.value[1]+e.target.value[2]+e.target.value[3]
+    let año:number = Number(aux)
+    aux = e.target.value[5]+e.target.value[6];
+    let mes:number =  Number(aux)  //mes es +1
+    aux = e.target.value[8]+e.target.value[9];
+    let dia:number =  Number(aux)
+    let ahora:number = hoy.getFullYear()*31104000+(hoy.getMonth()+1)*2592000+hoy.getDate()*86400
+    let datdi:number = dia*86400+mes*2592000+año*31104000
+    let resta:number =ahora-datdi
+     
+    if (resta < 0) {
+      alert("Selecione otra fecha");
+    } else {
+      setFecha(resta);
+    }      
   }
 
   type noti = {
@@ -47,6 +80,10 @@ export default function Home() {
     created_at:string
 
   }
+
+  useEffect(()=>{
+    llamada()
+  },[])
 
   return (
     <div className={styles.container}>
@@ -74,6 +111,7 @@ export default function Home() {
               placeholder="Dias"
               id="dias"
               className={styles.inx}
+              onChange={dias}
             />
             Dias;
             <br />
@@ -82,14 +120,17 @@ export default function Home() {
               placeholder="Horas"
               id="horas"
               className={styles.inx}
+              onChange={horas}
             />
             Horas;
             <br />
             <input
+            value={undefined}
               type="text"
               placeholder="Minutos"
               id="minutos"
               className={styles.inx}
+              onChange={minutos}
             />
             Minutos;
             <br />
@@ -97,7 +138,7 @@ export default function Home() {
           </div>
           <div className={styles.tiempo}>
             <div>Puede Buscar por fecha</div>
-            <input type="date" id="fecha" min={strhoy} max="2023-12-31"></input>
+            <input type="date" id="fecha" min="2000-12-31" max={strhoy}  onChange={ calendario}  ></input>
             <br />
             <button onClick={llamada} className={styles.boton}>
               Active su Busqueda por Fehca
@@ -109,9 +150,7 @@ export default function Home() {
           Seleccione: Comentarios, Historias ó Encuesta
           <select name="tag1" className={styles.inx2 } value={rafselect} onChange={select}  >
             <option value="comment">Comentarios</option>
-            <option value=" " selected>
-            Seleccione
-            </option>
+            <option value=" " selected>Seleccione</option>
             <option value="story">Historias</option>
             <option value="poll">Encuesta</option>
           </select>
