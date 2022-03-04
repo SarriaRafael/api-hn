@@ -3,12 +3,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 20px solid #110101;
+  border: 20px solid #adc7f5;
 }
 .p{
-  background: #d188f3;
+  background: #f0d0ff80;
   text-decoration: underline;
   padding: 20px;
+  box-shadow: 5px  5px  5px  2px  #606064;
 }
 .main {
   min-height: 100vh;
@@ -24,14 +25,14 @@
   margin: 1rem;
   padding: 2rem ;
   border: 2px solid #110101;
-  box-shadow: 5px  5px  5px  2px  #110101;
+  box-shadow: 5px  5px  5px  2px  #646060;
 }
 .usuario{
   width: 30%;
   margin: 1rem;
   padding: 2rem ;
   border: 2px solid #110101;
-  box-shadow: 5px  5px  5px  2px  #110101;
+  box-shadow: 5px  5px  5px  2px  #646060;
 
 }
 .tiempo{
@@ -83,7 +84,7 @@
   
   flex-direction: column;
   border-radius: 50%;
-  background: rgb(51, 255, 238);
+  background: rgb(164, 246, 239);
   box-shadow: 0 0 0 5px rgba(133, 77, 55, 0.5),25px  25px 10px rgba(133, 77, 55, 0.9);
 }
 
